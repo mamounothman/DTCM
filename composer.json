@@ -1,0 +1,20 @@
+{
+    "name": "mamoun/dtcm",
+    "description": "DTCM PHP integration library.",
+    "type": "library",
+    "keywords": ["facebook", "sdk"],
+    "authors": [
+        {
+            "name": "Ma'moun Othman",
+            "email": "mamoun.o@omnix.ae"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "DTCM\\": "src/DTCM/"
+        }
+    },
+    "minimum-stability": "dev",
+}
+
+
