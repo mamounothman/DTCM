@@ -2,7 +2,7 @@
     "name": "mamoun/dtcm",
     "description": "DTCM PHP integration library.",
     "type": "library",
-    "keywords": ["facebook", "sdk"],
+    "keywords": ["DTCM", "lib"],
     "authors": [
         {
             "name": "Ma'moun Othman",
@@ -14,7 +14,7 @@
             "DTCM\\": "src/DTCM/"
         }
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "dev"
 }
 
 
