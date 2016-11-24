@@ -2,7 +2,7 @@
 namespace DTCM;
 
 use DTCM\HttpClients\DTCMHttpClientInterface;
-use DTCM\HttpClients\FacebookCurlHttpClient;
+use DTCM\HttpClients\DTCMCurlHttpClient;
 use DTCM\Exceptions\DTCMException;
 use DTCM\DTCMResponse;
 

@@ -58,7 +58,7 @@ class DTCMRequest
      *
      * @param AccessToken|string
      *
-     * @return FacebookRequest
+     * @return DTCMkRequest
      */
     public function setAccessToken($accessToken)
     {
@@ -92,7 +92,7 @@ class DTCMRequest
     /**
      * Validate that an access token exists for this request.
      *
-     * @throws FacebookSDKException
+     * @throws DTCMException
      */
     public function validateAccessToken()
     {
@@ -143,9 +143,9 @@ class DTCMRequest
      *
      * @param string
      *
-     * @return FacebookRequest
+     * @return DTCMRequest
      *
-     * @throws FacebookSDKException
+     * @throws DTCMException
      */
     public function setEndpoint($endpoint)
     {
@@ -228,7 +228,7 @@ class DTCMRequest
      *
      * @param array $params
      *
-     * @return FacebookRequest
+     * @return DTCMRequest
      */
     public function dangerouslySetParams(array $params = [])
     {

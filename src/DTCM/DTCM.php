@@ -42,9 +42,9 @@ class DTCM
     }
 
     /**
-     * Returns the FacebookClient service.
+     * Returns the DTCMClient service.
      *
-     * @return FacebookClient
+     * @return DTCMClient
      */
     public function getClient()
     {
@@ -107,7 +107,7 @@ class DTCM
     }
 
     /**
-     * Instantiates a new FacebookRequest entity.
+     * Instantiates a new DTCMRequest entity.
      *
      * @param string                  $method
      * @param string                  $endpoint

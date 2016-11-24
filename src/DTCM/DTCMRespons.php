@@ -4,7 +4,7 @@ namespace DTCM;
 use DTCM\Exceptions\DTCMException;
 
 /**
- * Class FacebookResponse
+ * Class DTCMResponse
  *
  * @package DTCM
  */
@@ -131,7 +131,7 @@ class DTCMRespons
     /**
      * Throws the exception.
      *
-     * @throws FacebookSDKException
+     * @throws DTCMResponseException
      */
     public function throwException()
     {
@@ -149,7 +149,7 @@ class DTCMRespons
     /**
      * Returns the exception that was thrown for this request.
      *
-     * @return FacebookResponseException|null
+     * @return DTCMResponseException|null
      */
     public function getThrownException()
     {
