@@ -2,6 +2,7 @@
 namespace DTCM\HttpClients;
 
 use DTCM\Exceptions\DTCMException;
+use DTCM\Http\DTCMJsonRespons;
 
 /**
  * Class DTCMCurlHttpClient
@@ -33,17 +34,17 @@ class DTCMCurlHttpClient implements DTCMHttpClientInterface
     /**
      * @param dtcmCurl|null Procedural curl as object
      */
-    public function __construct(DTCMCurl $dtcmCurl = null)
+    public function __construct($dtcmCurl = null)
     {
-        $this->dtcmCurl = $dtcmCurl ?: new dtcmCurl();
+        $this->dtcmCurl = $dtcmCurl ?: new DTCMCurl();
     }
 
     /**
      * @inheritdoc
      */
-    public function send($url, $method, $body, array $headers, $timeOut)
+    public function send($url, $method, $body, array $headers, $timeOut, $extra_options = null)
     {
-        $this->openConnection($url, $method, $body, $headers, $timeOut);
+        $this->openConnection($url, $method, $body, $headers, $timeOut, $extra_options);
         $this->sendRequest();
 
         if ($curlErrorCode = $this->dtcmCurl->errno()) {
@@ -52,10 +53,8 @@ class DTCMCurlHttpClient implements DTCMHttpClientInterface
 
         // Separate the raw headers from the raw body
         list($rawHeaders, $rawBody) = $this->extractResponseHeadersAndBody();
-
         $this->closeConnection();
-
-        return new GraphRawResponse($rawHeaders, $rawBody);
+        return new DTCMJsonRespons($rawHeaders, $rawBody);
     }
 
     /**
@@ -67,20 +66,21 @@ class DTCMCurlHttpClient implements DTCMHttpClientInterface
      * @param array  $headers The request headers.
      * @param int    $timeOut The timeout in seconds for the request.
      */
-    public function openConnection($url, $method, $body, array $headers, $timeOut)
+    public function openConnection($url, $method, $body, array $headers, $timeOut, $extra_options = null)
     {
         $options = [
             CURLOPT_CUSTOMREQUEST => $method,
             CURLOPT_HTTPHEADER => $this->compileRequestHeaders($headers),
             CURLOPT_URL => $url,
-            CURLOPT_CONNECTTIMEOUT => 10,
+            CURLOPT_CONNECTTIMEOUT => 30,
             CURLOPT_TIMEOUT => $timeOut,
             CURLOPT_RETURNTRANSFER => true, // Follow 301 redirects
             CURLOPT_HEADER => true, // Enable header processing
-            CURLOPT_SSL_VERIFYHOST => 2,
-            CURLOPT_SSL_VERIFYPEER => true,
         ];
-
+        if(!empty($extra_options)) {
+            $options += $extra_options;
+        }
+        
         if ($method !== "GET") {
             $options[CURLOPT_POSTFIELDS] = $body;
         }
@@ -119,7 +119,6 @@ class DTCMCurlHttpClient implements DTCMHttpClientInterface
         foreach ($headers as $key => $value) {
             $return[] = $key . ': ' . $value;
         }
-
         return $return;
     }
 

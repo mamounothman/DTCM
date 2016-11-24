@@ -27,6 +27,14 @@ class HttpClientsFactory
             return self::detectDefaultClient();
         }
 
+        if ('curl' === $handler) {
+            if (!extension_loaded('curl')) {
+                throw new Exception('The cURL extension must be loaded in order to use the "curl" handler.');
+            }
+
+            return new DTCMCurlHttpClient();
+        }
+
         throw new InvalidArgumentException('The http client handler must be set to "curl", or must be an instance of DTCM\HttpClients\DTCMHttpClientInterface');
     }
 
@@ -38,6 +46,8 @@ class HttpClientsFactory
     private static function detectDefaultClient()
     {
         if (extension_loaded('curl')) {
+            //$dtcmCurl = new DTCMCurl();
+            //var_dump($dtcmCurl);die;
             return new DTCMCurlHttpClient();
         }
 

@@ -16,6 +16,20 @@ class AccessToken
     protected $value = '';
 
     /**
+     * The access token type.
+     *
+     * @var string
+     */
+    protected $type = '';
+
+    /**
+     * The access token scope.
+     *
+     * @var string
+     */
+    protected $scope = '';
+
+    /**
      * Date when token expires.
      *
      * @var \DateTime|null
@@ -28,24 +42,14 @@ class AccessToken
      * @param string $accessToken
      * @param int    $expiresAt
      */
-    public function __construct($accessToken, $expiresAt = 0)
+    public function __construct($accessToken, $expiresAt = 0, $scope, $type)
     {
         $this->value = $accessToken;
         if ($expiresAt) {
             $this->setExpiresAtFromTimeStamp($expiresAt);
         }
-    }
-
-    /**
-     * Generate an app secret proof to sign a request to Graph.
-     *
-     * @param string $appSecret The app secret.
-     *
-     * @return string
-     */
-    public function getAppSecretProof($appSecret)
-    {
-        return hash_hmac('sha256', $this->value, $appSecret);
+        $this->scope = $scope;
+        $this->type = $type;
     }
 
     /**
@@ -94,6 +98,27 @@ class AccessToken
     public function getValue()
     {
         return $this->value;
+    }
+
+
+    /**
+     * Returns the token scope as a string.
+     *
+     * @return string
+     */
+    public function getScope()
+    {
+        return $this->scope;
+    }
+
+    /**
+     * Returns the token scope as a string.
+     *
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
     }
 
     /**
