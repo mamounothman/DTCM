@@ -11,22 +11,22 @@ use DTCM\Exceptions\DTCMException;
 class DTCMRespons
 {
     /**
-     * @var int The HTTP status code response from DTCM Curl resposne.
+     * @var int The HTTP status code response from DTCM resposne.
      */
     protected $httpStatusCode;
 
     /**
-     * @var array The headers returned from DTCM Curl resposne.
+     * @var array The headers returned from DTCM resposne.
      */
     protected $headers;
 
     /**
-     * @var string The raw body of the response from DTCM Curl resposne.
+     * @var string The raw body of the response from DTCM resposne.
      */
     protected $body;
 
     /**
-     * @var array The decoded body of the DTCM Curl response.
+     * @var array The decoded body of the DTCM response.
      */
     protected $decodedBody = [];
 
