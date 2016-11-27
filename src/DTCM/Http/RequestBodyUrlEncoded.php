@@ -14,7 +14,7 @@ class RequestBodyUrlEncoded implements RequestBodyInterface
     protected $params = [];
 
     /**
-     * Creates a new GraphUrlEncodedBody entity.
+     * Creates a new DTCMUrlEncodedBody entity.
      *
      * @param array $params
      */

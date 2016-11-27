@@ -25,7 +25,7 @@ class DTCMRawResponse implements RequestBodyInterface
     protected $httpResponseCode;
 
     /**
-     * Creates a new GraphRawResponse entity.
+     * Creates a new DTCMRawResponse entity.
      *
      * @param string|array $headers        The headers as a raw string or array.
      * @param string       $body           The raw response body.

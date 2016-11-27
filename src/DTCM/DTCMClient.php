@@ -109,7 +109,6 @@ class DTCMClient
 
         // Don't catch to allow it to bubble up.
         $jSonResponse = $this->httpClientHandler->send($url, $method, $body, $headers, $timeOut);
-        print_r($jSonResponse);die;
 
         $returnResponse = new DTCMRespons(
             $request,
@@ -117,7 +116,7 @@ class DTCMClient
             $jSonResponse->getHttpResponseCode(),
             $jSonResponse->getHeaders()
         );
-
+        var_dump($jSonResponse->getBody());
         if ($returnResponse->isError()) {
             throw $returnResponse->getThrownException();
         }

@@ -10,7 +10,7 @@ namespace DTCM\Http;
 class DTCMJsonRespons extends DTCMRawResponse
 {
   /**
-     * Creates a new GraphRawResponse entity.
+     * Creates a new DTCMRawResponse entity.
      *
      * @param string|array $headers        The headers as a raw string or array.
      * @param string       $body           The raw response body.

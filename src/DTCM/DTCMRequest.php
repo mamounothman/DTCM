@@ -23,7 +23,7 @@ class DTCMRequest
     protected $method;
 
     /**
-     * @var string The Graph endpoint for this request.
+     * @var string DTCM endpoint for this request.
      */
     protected $endpoint;
 
@@ -220,20 +220,6 @@ class DTCMRequest
     public function setParams(array $params = [])
     {
         $this->params = $params;
-        return $this;
-    }
-
-    /**
-     * Set the params for this request without filtering them first.
-     *
-     * @param array $params
-     *
-     * @return DTCMRequest
-     */
-    public function dangerouslySetParams(array $params = [])
-    {
-        $this->params = array_merge($this->params, $params);
-
         return $this;
     }
 

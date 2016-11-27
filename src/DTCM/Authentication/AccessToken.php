@@ -42,14 +42,22 @@ class AccessToken
      * @param string $accessToken
      * @param int    $expiresAt
      */
-    public function __construct($accessToken, $expiresAt = 0, $scope, $type)
+    public function __construct($accessToken, $expiresAt = 0, $scope = 'https://api.etixdubai.com/performances.* https://api.etixdubai.com/baskets.* https://api.etixdubai.com/orders.* https://api.etixdubai.com/inventory.* https://api.etixdubai.com/customers.* https://api.etixdubai.com/tixscan.*', $type = 'Bearer')
     {
-        $this->value = $accessToken;
-        if ($expiresAt) {
-            $this->setExpiresAtFromTimeStamp($expiresAt);
+        if(is_object($accessToken)) {
+             $this->value = $accessToken->access_token;
+             $this->setExpiresAtFromTimeStamp($accessToken->expiresAt);
+             $this->scope = $accessToken->scope;
+             $this->type = $accessToken->token_type;
         }
-        $this->scope = $scope;
-        $this->type = $type;
+        else {
+            $this->value = $accessToken;
+            if ($expiresAt) {
+                $this->setExpiresAtFromTimeStamp($expiresAt);
+            }
+            $this->scope = $scope;
+            $this->type = $type;
+        }
     }
 
     /**

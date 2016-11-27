@@ -11,22 +11,22 @@ use DTCM\Exceptions\DTCMException;
 class DTCMRespons
 {
     /**
-     * @var int The HTTP status code response from Graph.
+     * @var int The HTTP status code response from DTCM Curl resposne.
      */
     protected $httpStatusCode;
 
     /**
-     * @var array The headers returned from Graph.
+     * @var array The headers returned from DTCM Curl resposne.
      */
     protected $headers;
 
     /**
-     * @var string The raw body of the response from Graph.
+     * @var string The raw body of the response from DTCM Curl resposne.
      */
     protected $body;
 
     /**
-     * @var array The decoded body of the Graph response.
+     * @var array The decoded body of the DTCM Curl response.
      */
     protected $decodedBody = [];
 
@@ -119,7 +119,7 @@ class DTCMRespons
     }
 
     /**
-     * Returns true if Graph returned an error message.
+     * Returns true if DTCM request returned an error message.
      *
      * @return boolean
      */
@@ -158,38 +158,18 @@ class DTCMRespons
 
     /**
      * Convert the raw response into an array if possible.
-     *
-     * Graph will return 2 types of responses:
-     * - JSON(P)
-     *    Most responses from Graph are JSON(P)
-     * - application/x-www-form-urlencoded key/value pairs
-     *    Happens on the `/oauth/access_token` endpoint when exchanging
-     *    a short-lived access token for a long-lived access token
-     * - And sometimes nothing :/ but that'd be a bug.
      */
     public function decodeBody()
     {
-        $this->decodedBody = json_decode($this->body, true);
-
-        if ($this->decodedBody === null) {
-            $this->decodedBody = [];
-            parse_str($this->body, $this->decodedBody);
-        } elseif (is_bool($this->decodedBody)) {
-            // Backwards compatibility for Graph < 2.1.
-            // Mimics 2.1 responses.
-            // @TODO Remove this after Graph 2.0 is no longer supported
-            $this->decodedBody = ['success' => $this->decodedBody];
-        } elseif (is_numeric($this->decodedBody)) {
-            $this->decodedBody = ['id' => $this->decodedBody];
+        if(is_object($this->body)) {
+            $this->decodedBody;
         }
-
-        if (!is_array($this->decodedBody)) {
-            $this->decodedBody = [];
+        else if (is_string($this->body)) {
+            $this->decodedBody = json_decode($this->body, true);    
         }
 
         if ($this->isError()) {
             $this->makeException();
         }
     }
-
 }

@@ -29,13 +29,8 @@ class DTCM
     {
         //@todo: get config from laravel.
         $config = array_merge([
-            // 'app_id' => getenv(static::APP_ID_ENV_NAME),
-            // 'app_secret' => getenv(static::APP_SECRET_ENV_NAME),
-            // 'default_graph_version' => static::DEFAULT_GRAPH_VERSION,
-            // 'enable_beta_mode' => false,
             'http_client_handler' => null,
             'persistent_data_handler' => null,
-            // 'url_detection_handler' => null,
         ], $config);
         $this->client = new DTCMClient(HttpClientsFactory::createHttpClient('curl'));
         $this->setDefaultAccessToken($config['AccessToken']);
@@ -86,14 +81,12 @@ class DTCM
     }
 
     /**
-     * Sends a request to Graph and returns the result.
+     * Sends a request to DTCM and returns the result.
      *
      * @param string                  $method
      * @param string                  $endpoint
      * @param array                   $params
      * @param AccessToken|string|null $accessToken
-     * @param string|null             $eTag
-     * @param string|null             $graphVersion
      *
      * @return DTCMResponse
      *

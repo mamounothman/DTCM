@@ -9,7 +9,7 @@ namespace DTCM\Http;
 interface RequestBodyInterface
 {
     /**
-     * Get the body of the request to send to Graph.
+     * Get the body of the request to send to DTCM.
      *
      * @return string
      */
