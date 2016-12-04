@@ -63,7 +63,7 @@ class DTCM
      *
      * @throws \InvalidArgumentException
      */
-    public function setDefaultAccessToken($accessToken)
+    public function setDefaultAccessToken($accessToken = null)
     {
         if (is_string($accessToken)) {
             $this->defaultAccessToken = new AccessToken($accessToken);
@@ -92,10 +92,9 @@ class DTCM
      *
      * @throws DTCMException
      */
-    public function sendRequest($method, $endpoint, array $params = [], $accessToken = null)
+    public function sendRequest($method, $endpoint, array $params = [], array $header = [],  array $data = [], $json = false)
     {
-        $accessToken = $accessToken ?: $this->defaultAccessToken;
-        $request = $this->request($method, $endpoint, $params, $accessToken);
+        $request = $this->request($method, $endpoint, $params, $header, $data, $json);
         return $this->lastResponse = $this->client->sendRequest($request);
     }
 
@@ -111,15 +110,18 @@ class DTCM
      *
      * @throws DTCMException
      */
-    public function request($method, $endpoint, array $params = [], $accessToken = null)
+    public function request($method, $endpoint, array $params = [], array $header = [], array $data = [], $json = false)
     {
-        $accessToken = $accessToken ?: $this->defaultAccessToken;
-
-        return new DTCMRequest(
+        $accessToken = $this->defaultAccessToken;
+        $request = new DTCMRequest(
             $accessToken,
             $method,
             $endpoint,
-            $params
+            $params,
+            $header,
+            $data,
+            $json
         );
+        return $request; 
     }
 }

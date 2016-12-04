@@ -62,6 +62,8 @@ class DTCMClient
     {
         //@todo: Handle default HttpClientHandler if the curl extension is not loaded.
         return extension_loaded('curl') ? new DTCMCurlHttpClient() : new DTCMCurlHttpClient();
+        //throw new DTCMException("No HttpClientsHandler! please make sure you have php curl extension is loaded or implement your own HttpClientsHandler", 1);
+        ;
     }
 
     /**
@@ -75,17 +77,24 @@ class DTCMClient
     {
 
         $requestBody = $request->getUrlEncoded();
+        $method = $request->getMethod();
+        $header = $request->getHeaders();
+        $data = $request->getData();
+        $query_string_params = $requestBody->getBody();
+        $url = $request->getEndpoint();
+        $json = $request->isJson();
+
         if(!empty($requestBody)) {
-            $url =  $request->getEndpoint() . '?' . $requestBody->getBody();
+            $url .= '?' . $requestBody->getBody();
         }
-        else {
-             $url = $request->getEndpoint();
-        }
+
         return [
             $url,
-            $request->getMethod(),
-            $request->getHeaders(),
-            $requestBody->getBody()
+            $method,
+            $header,
+            $query_string_params,
+            $data,
+            $json
         ];
     }
 
@@ -100,15 +109,15 @@ class DTCMClient
      */
     public function sendRequest(DTCMRequest $request)
     {
-        list($url, $method, $headers, $body) = $this->prepareRequestMessage($request);
+                                      //params, header, data
+        list($url, $method, $headers, $query_string_params, $data, $json) = $this->prepareRequestMessage($request);
         
         $headers['Authorization'] = 'Bearer ' . $request->getAccessToken();
         
         // Since file uploads can take a while, we need to give more time for uploads
-        $timeOut = static::DEFAULT_REQUEST_TIMEOUT;
-
+        // $timeOut = static::DEFAULT_REQUEST_TIMEOUT;
         // Don't catch to allow it to bubble up.
-        $jSonResponse = $this->httpClientHandler->send($url, $method, $body, $headers, $timeOut);
+        $jSonResponse = $this->httpClientHandler->send($url, $method, $query_string_params, $headers, $data, $json);
 
         $returnResponse = new DTCMRespons(
             $request,
@@ -116,7 +125,7 @@ class DTCMClient
             $jSonResponse->getHttpResponseCode(),
             $jSonResponse->getHeaders()
         );
-        var_dump($jSonResponse->getBody());
+        // var_dump($jSonResponse->getBody());
         if ($returnResponse->isError()) {
             throw $returnResponse->getThrownException();
         }

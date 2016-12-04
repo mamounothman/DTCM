@@ -20,5 +20,5 @@ interface DTCMHttpClientInterface
      *
      * @throws \DTCM\Exceptions\DTCMException
      */
-    public function send($url, $method, $body, array $headers, $timeOut);
+    public function send($url, $method, $query_string_params, array $headers = [], array $data = [], $json = false);
 }

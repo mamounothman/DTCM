@@ -42,9 +42,9 @@ class DTCMCurlHttpClient implements DTCMHttpClientInterface
     /**
      * @inheritdoc
      */
-    public function send($url, $method, $body, array $headers, $timeOut, $extra_options = null)
+    public function send($url, $method, $query_string_params, array $headers = [], array $data = [], $json = false)
     {
-        $this->openConnection($url, $method, $body, $headers, $timeOut, $extra_options);
+        $this->openConnection($url, $method, $query_string_params, $headers, $data, 60, $json);
         $this->sendRequest();
 
         if ($curlErrorCode = $this->dtcmCurl->errno()) {
@@ -62,11 +62,11 @@ class DTCMCurlHttpClient implements DTCMHttpClientInterface
      *
      * @param string $url     The endpoint to send the request to.
      * @param string $method  The request method.
-     * @param string $body    The body of the request.
+     * @param string $query_string_params  The query string parameters of the request.
      * @param array  $headers The request headers.
      * @param int    $timeOut The timeout in seconds for the request.
      */
-    public function openConnection($url, $method, $body, array $headers, $timeOut, $extra_options = null)
+    public function openConnection($url, $method, $query_string_params, array $headers = [], array $data = [], $timeOut = null, $json)
     {
         $options = [
             CURLOPT_CUSTOMREQUEST => $method,
@@ -77,12 +77,9 @@ class DTCMCurlHttpClient implements DTCMHttpClientInterface
             CURLOPT_RETURNTRANSFER => true, // Follow 301 redirects
             CURLOPT_HEADER => true, // Enable header processing
         ];
-        if(!empty($extra_options)) {
-            $options += $extra_options;
-        }
         
         if ($method !== "GET") {
-            $options[CURLOPT_POSTFIELDS] = $body;
+            $options[CURLOPT_POSTFIELDS] = ($json) ? json_encode($data) : $data;
         }
 
         $this->dtcmCurl->init();

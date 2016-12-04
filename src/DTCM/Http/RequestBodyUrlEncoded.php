@@ -24,7 +24,8 @@ class RequestBodyUrlEncoded implements RequestBodyInterface
     }
 
     /**
-     * @inheritdoc
+     * Create a query string from params array.
+     * @return string.
      */
     public function getBody()
     {

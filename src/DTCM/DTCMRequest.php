@@ -38,6 +38,16 @@ class DTCMRequest
     protected $params = [];
 
     /**
+     * @var array The data to send with this request.
+     */
+    protected $data = [];
+
+    /**
+     * @var indicate if post data posted as JSON.
+     */
+    protected $json = false;
+
+    /**
      * Creates a new Request entity.
      *
      * @param AccessToken|string|null $accessToken
@@ -45,12 +55,15 @@ class DTCMRequest
      * @param string|null             $endpoint
      * @param array|null              $params
      */
-    public function __construct($accessToken = null, $method = null, $endpoint = null, array $params = [])
+    public function __construct($accessToken = null, $method = null, $endpoint = null, array $params = [], array $headers = [], array $data = [], $json = false)
     {
         $this->setAccessToken($accessToken);
         $this->setMethod($method);
         $this->setEndpoint($endpoint);
         $this->setParams($params);
+        $this->setData($data);
+        $this->setHeaders($headers);
+        $this->json = $json;
     }
 
     /**
@@ -181,18 +194,6 @@ class DTCMRequest
      *
      * @return RequestBodyUrlEncoded
      */
-    public function getUrlEncodedBody()
-    {
-        $params = $this->getPostParams();
-
-        return new RequestBodyUrlEncoded($params);
-    }
-
-    /**
-     * Returns the body of the request as URL-encoded.
-     *
-     * @return RequestBodyUrlEncoded
-     */
     public function getUrlEncoded()
     {
         $params = $this->getParams();
@@ -234,17 +235,23 @@ class DTCMRequest
     }
 
     /**
-     * Only return params on POST requests.
+     * Generate and return the params for this request.
      *
      * @return array
      */
-    public function getPostParams()
+    public function setData($data = [])
     {
-        if ($this->getMethod() === 'POST') {
-            return $this->getParams();
-        }
+        $this->data = $data;
+    }
 
-        return [];
+    /**
+     * Generate and return the params for this request.
+     *
+     * @return array
+     */
+    public function getData()
+    {
+        return $this->data;
     }
 
     /**
@@ -269,5 +276,15 @@ class DTCMRequest
         return [
             'Content-Type' => 'application/json'
         ];
+    }
+
+    /**
+     * Check if the request should be send in json format.
+     *
+     * @return bool
+     */
+    public function isJson()
+    {
+        return $this->json;
     }
 }
