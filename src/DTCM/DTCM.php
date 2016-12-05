@@ -65,13 +65,15 @@ class DTCM
      */
     public function setDefaultAccessToken($accessToken = null)
     {
-        if (is_string($accessToken)) {
+        if (is_string($accessToken)) 
+        {
             $this->defaultAccessToken = new AccessToken($accessToken);
 
             return;
         }
 
-        if ($accessToken instanceof AccessToken) {
+        if ($accessToken instanceof AccessToken) 
+        {
             $this->defaultAccessToken = $accessToken;
 
             return;
@@ -85,16 +87,16 @@ class DTCM
      *
      * @param string                  $method
      * @param string                  $endpoint
-     * @param array                   $params
+     * @param array                   $query_string
      * @param AccessToken|string|null $accessToken
      *
      * @return DTCMResponse
      *
      * @throws DTCMException
      */
-    public function sendRequest($method, $endpoint, array $params = [], array $header = [],  array $data = [], $json = false)
+    public function sendRequest($method, $endpoint, array $query_string = [], array $header = [],  array $data = [])
     {
-        $request = $this->request($method, $endpoint, $params, $header, $data, $json);
+        $request = $this->request($method, $endpoint, $query_string, $header, $data);
         return $this->lastResponse = $this->client->sendRequest($request);
     }
 
@@ -103,24 +105,23 @@ class DTCM
      *
      * @param string                  $method
      * @param string                  $endpoint
-     * @param array                   $params
+     * @param array                   $query_string
      * @param AccessToken|string|null $accessToken
      *
      * @return DTCMRequest
      *
      * @throws DTCMException
      */
-    public function request($method, $endpoint, array $params = [], array $header = [], array $data = [], $json = false)
+    public function request($method, $endpoint, array $query_string = [], array $header = [], array $data = [])
     {
         $accessToken = $this->defaultAccessToken;
         $request = new DTCMRequest(
             $accessToken,
             $method,
             $endpoint,
-            $params,
+            $query_string,
             $header,
-            $data,
-            $json
+            $data
         );
         return $request; 
     }

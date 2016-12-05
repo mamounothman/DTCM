@@ -42,9 +42,9 @@ class DTCMCurlHttpClient implements DTCMHttpClientInterface
     /**
      * @inheritdoc
      */
-    public function send($url, $method, $query_string_params, array $headers = [], array $data = [], $json = false)
+    public function send($url, $method, $query_string_params, array $headers = [], array $data = [])
     {
-        $this->openConnection($url, $method, $query_string_params, $headers, $data, 60, $json);
+        $this->openConnection($url, $method, $query_string_params, $headers, $data, 60);
         $this->sendRequest();
 
         if ($curlErrorCode = $this->dtcmCurl->errno()) {
@@ -66,7 +66,7 @@ class DTCMCurlHttpClient implements DTCMHttpClientInterface
      * @param array  $headers The request headers.
      * @param int    $timeOut The timeout in seconds for the request.
      */
-    public function openConnection($url, $method, $query_string_params, array $headers = [], array $data = [], $timeOut = null, $json)
+    public function openConnection($url, $method, $query_string_params, array $headers = [], array $data = [], $timeOut = null)
     {
         $options = [
             CURLOPT_CUSTOMREQUEST => $method,
@@ -79,7 +79,7 @@ class DTCMCurlHttpClient implements DTCMHttpClientInterface
         ];
         
         if ($method !== "GET") {
-            $options[CURLOPT_POSTFIELDS] = ($json) ? json_encode($data) : $data;
+            $options[CURLOPT_POSTFIELDS] =  json_encode($data);
         }
 
         $this->dtcmCurl->init();

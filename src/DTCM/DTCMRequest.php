@@ -55,7 +55,7 @@ class DTCMRequest
      * @param string|null             $endpoint
      * @param array|null              $params
      */
-    public function __construct($accessToken = null, $method = null, $endpoint = null, array $params = [], array $headers = [], array $data = [], $json = false)
+    public function __construct($accessToken = null, $method = null, $endpoint = null, array $params = [], array $headers = [], array $data = [])
     {
         $this->setAccessToken($accessToken);
         $this->setMethod($method);
@@ -63,7 +63,6 @@ class DTCMRequest
         $this->setParams($params);
         $this->setData($data);
         $this->setHeaders($headers);
-        $this->json = $json;
     }
 
     /**
@@ -276,15 +275,5 @@ class DTCMRequest
         return [
             'Content-Type' => 'application/json'
         ];
-    }
-
-    /**
-     * Check if the request should be send in json format.
-     *
-     * @return bool
-     */
-    public function isJson()
-    {
-        return $this->json;
     }
 }

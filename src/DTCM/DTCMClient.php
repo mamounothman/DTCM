@@ -82,7 +82,6 @@ class DTCMClient
         $data = $request->getData();
         $query_string_params = $requestBody->getBody();
         $url = $request->getEndpoint();
-        $json = $request->isJson();
 
         if(!empty($requestBody)) {
             $url .= '?' . $requestBody->getBody();
@@ -93,8 +92,7 @@ class DTCMClient
             $method,
             $header,
             $query_string_params,
-            $data,
-            $json
+            $data
         ];
     }
 
@@ -110,14 +108,14 @@ class DTCMClient
     public function sendRequest(DTCMRequest $request)
     {
                                       //params, header, data
-        list($url, $method, $headers, $query_string_params, $data, $json) = $this->prepareRequestMessage($request);
+        list($url, $method, $headers, $query_string_params, $data) = $this->prepareRequestMessage($request);
         
         $headers['Authorization'] = 'Bearer ' . $request->getAccessToken();
         
         // Since file uploads can take a while, we need to give more time for uploads
         // $timeOut = static::DEFAULT_REQUEST_TIMEOUT;
         // Don't catch to allow it to bubble up.
-        $jSonResponse = $this->httpClientHandler->send($url, $method, $query_string_params, $headers, $data, $json);
+        $jSonResponse = $this->httpClientHandler->send($url, $method, $query_string_params, $headers, $data);
 
         $returnResponse = new DTCMRespons(
             $request,
