@@ -46,8 +46,6 @@ class HttpClientsFactory
     private static function detectDefaultClient()
     {
         if (extension_loaded('curl')) {
-            //$dtcmCurl = new DTCMCurl();
-            //var_dump($dtcmCurl);die;
             return new DTCMCurlHttpClient();
         }
 
