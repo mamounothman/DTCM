@@ -44,7 +44,7 @@ class DTCMCurlHttpClient implements DTCMHttpClientInterface
      */
     public function send($url, $method, $query_string_params, array $headers = [], array $data = [], $json = false)
     {
-        $this->openConnection($url, $method, $query_string_params, $headers, $data, 60, $json);
+        $this->openConnection($url, $method, $query_string_params, $headers, $data, 30, $json);
         $this->sendRequest();
 
         if ($curlErrorCode = $this->dtcmCurl->errno()) {
@@ -77,9 +77,16 @@ class DTCMCurlHttpClient implements DTCMHttpClientInterface
             CURLOPT_RETURNTRANSFER => true, // Follow 301 redirects
             CURLOPT_HEADER => true, // Enable header processing
         ];
-        
+
+        if(!$json && $method == "POST" && !empty($data['username'])) {
+            $options[CURLOPT_HTTPAUTH] = CURLAUTH_BASIC;
+            $options[CURLOPT_USERPWD] = "{$data['username']}:{$data['password']}";
+            unset($data['username']);
+            unset($data['password']);
+        }
+
         if ($method !== "GET") {
-            $options[CURLOPT_POSTFIELDS] = ($json) ? json_encode($data) : $data;
+            $options[CURLOPT_POSTFIELDS] = ($json) ? json_encode($data) : $this->compileRequestData($data);
         }
 
         $this->dtcmCurl->init();
@@ -115,6 +122,23 @@ class DTCMCurlHttpClient implements DTCMHttpClientInterface
 
         foreach ($headers as $key => $value) {
             $return[] = $key . ': ' . $value;
+        }
+        return $return;
+    }
+
+    /**
+     * Compiles the request data into a curl-friendly format.
+     *
+     * @param array $data The request data.
+     *
+     * @return array
+     */
+    public function compileRequestData(array $data)
+    {
+        $return = "";
+
+        foreach ($data as $key => $value) {
+            $return .= $key . '=' . $value;
         }
         return $return;
     }
