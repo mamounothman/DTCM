@@ -85,8 +85,12 @@ class DTCMCurlHttpClient implements DTCMHttpClientInterface
             unset($data['password']);
         }
 
-        if ($method !== "GET") {
+        if ($method == "POST") {
             $options[CURLOPT_POSTFIELDS] = ($json) ? json_encode($data) : $this->compileRequestData($data);
+        }
+
+        if($method == "DELETE") {
+            $options[CURLOPT_CUSTOMREQUEST] = "DELETE";
         }
 
         $this->dtcmCurl->init();
